@@ -1,11 +1,14 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { CoinsIcon, HomeIcon, ShieldCheckIcon } from "lucide-react";
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
+import { CoinsIcon, HomeIcon, MenuIcon, ShieldCheckIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import Logo from "./logo";
-import { buttonVariants } from "./ui/button";
+import { Button, buttonVariants } from "./ui/button";
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "./ui/sheet";
 
 const routes = [
   {
@@ -29,11 +32,12 @@ const routes = [
     icon: CoinsIcon,
   },
 ];
-export default function DesktopSidebar() {
+export function DesktopSidebar() {
   const pathname = usePathname();
-  const activeRoute = routes.find(
-    (route) => route.href.length > 0 && pathname.includes(route.href)
-  ) || routes[0];
+  const activeRoute =
+    routes.find(
+      (route) => route.href.length > 0 && pathname.includes(route.href)
+    ) || routes[0];
 
   return (
     <div
@@ -52,7 +56,10 @@ export default function DesktopSidebar() {
             key={route.href}
             href={route.href}
             className={buttonVariants({
-              variant: activeRoute.href === route.href ? "sidebarActiveItem" : "sidebarItem",
+              variant:
+                activeRoute.href === route.href
+                  ? "sidebarActiveItem"
+                  : "sidebarItem",
             })}
           >
             <route.icon size={20} />
@@ -60,6 +67,56 @@ export default function DesktopSidebar() {
           </Link>
         ))}
       </div>
+    </div>
+  );
+}
+
+export function MobileSidebar() {
+  const [isOpen, setOpen] = useState(false);
+  const pathname = usePathname();
+  const activeRoute =
+    routes.find(
+      (route) => route.href.length > 0 && pathname.includes(route.href)
+    ) || routes[0];
+
+  return (
+    <div className="block border-separate bg-background md:hidden">
+      <nav className="container flex items-center justify-center px-8 ">
+        <Sheet open={isOpen} onOpenChange={setOpen}>
+          <SheetTrigger asChild>
+            <Button variant="ghost" size="icon">
+              <MenuIcon />
+            </Button>
+          </SheetTrigger>
+          <SheetContent
+            className="w-[400px] sm:w-[540px] space-y-4"
+            side="left"
+          >
+            <VisuallyHidden.Root>
+              <SheetTitle></SheetTitle>
+            </VisuallyHidden.Root>
+            <Logo />
+            <div className="flex flex-col gap-1">
+              {routes.map((route) => (
+                <Link
+                  key={route.href}
+                  href={route.href}
+                  className={buttonVariants({
+                    variant:
+                      activeRoute.href === route.href
+                        ? "sidebarActiveItem"
+                        : "sidebarItem",
+                  })}
+                  onClick={() => setOpen(o => !o)}
+                >
+                  <route.icon size={20} />
+                  {route.label}
+                </Link>
+              ))}
+            </div>
+          </SheetContent>
+        </Sheet>
+      </nav>
     </div>
   );
 }
