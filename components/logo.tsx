@@ -14,13 +14,13 @@ export default function Logo({
       href="/"
       className={cn("text-2xl font-extrabold flex items-center gap-2", fontSize)}
     >
-      <div className="rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 p-2">
+      <div className="rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 p-2">
         <SquareDashedMousePointerIcon size={iconSize}
           className="stroke-white"
         />
       </div>
       <div>
-        <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
+        <span className="bg-gradient-to-r from-emerald-500 to-emerald-600 bg-clip-text text-transparent">
           Flow
         </span>
         <span className="text-stone-700 dark:text-stone-300">Scrape</span>
