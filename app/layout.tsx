@@ -1,7 +1,11 @@
 import { ThemeProvider } from "@/components/provider/theme-providers";
 import { ClerkProvider } from "@clerk/nextjs";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+
+import { ReactQueryProvider } from "@/components/provider/react-query-provider";
+import { Toaster } from "sonner";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -26,24 +30,31 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider afterSignOutUrl={"/sign-in"} appearance={{
-      elements: {
-        formButtonPrimary: "text-white bg-primary/90 text-sm !shadow-none",
-      }
-    }}>
+    <ClerkProvider
+      afterSignOutUrl={"/sign-in"}
+      appearance={{
+        elements: {
+          formButtonPrimary: "text-white bg-primary/90 text-sm !shadow-none",
+        },
+      }}
+    >
       <html lang="en" suppressHydrationWarning>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-            storageKey="flowscrape-theme"
-          >
-            {children}
-          </ThemeProvider>
+          <ReactQueryProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+              storageKey="flowscrape-theme"
+            >
+              {children}
+            </ThemeProvider>
+            <ReactQueryDevtools />
+          </ReactQueryProvider>
+          <Toaster />
         </body>
       </html>
     </ClerkProvider>
